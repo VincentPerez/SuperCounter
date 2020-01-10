@@ -24,6 +24,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import pl.pawelkleczkowski.customgauge.CustomGauge;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView counter;
     private Button reset, decrease;
     private AlarmManager alarmManager;
+    private CustomGauge gauge;
+    private int i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
         counter = findViewById(R.id.counter);
         reset = findViewById(R.id.reset_button);
         decrease = findViewById(R.id.decrease_button);
+        gauge = findViewById(R.id.counter_gauge);
+
+        gauge.setEndValue(COUNTER_MAX);
+        gauge.setPointSize(0);
 
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,6 +172,8 @@ public class MainActivity extends AppCompatActivity {
         int count = getCurrentCounter();
         counter.setText(String.valueOf(count));
         showNotification(count);
+
+        updateGauge();
     }
 
     public static String formatDateSimpleDay(Date timeToFormat) {
@@ -233,4 +243,36 @@ public class MainActivity extends AppCompatActivity {
     public static void decreaseCurrentCounter() {
         decreaseCounter(new Date());
     }
+
+    private void updateGauge() {
+        final int value = gauge.getValue();
+        final int steps = getCurrentCounter() - (COUNTER_MAX - value);
+        final int sign = steps < 0 ? -1 : 1;
+        decrease.setEnabled(false);
+        reset.setEnabled(false);
+        Log.d("TEST", "value: " + value + " | steps: " + steps + " | sign: " + sign);
+        new Thread() {
+            public void run() {
+                for (i=0;i<=Math.abs(steps);i++) {
+                    try {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (i == Math.abs(steps)){
+                                    decrease.setEnabled(true);
+                                    reset.setEnabled(true);
+                                }
+                                gauge.setValue(value - i * sign);
+                            }
+                        });
+                        Thread.sleep(15);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }.start();
+    }
+
 }

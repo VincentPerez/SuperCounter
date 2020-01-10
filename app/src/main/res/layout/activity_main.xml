@@ -27,7 +27,7 @@
         android:fontFamily="@font/montserrat"
         android:text="100"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="100sp"
+        android:textSize="70sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -78,6 +78,26 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:visibility="visible"/>
 
-
+    <pl.pawelkleczkowski.customgauge.CustomGauge
+        android:id="@+id/counter_gauge"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true"
+        android:elevation="5dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/counter"
+        app:layout_constraintTop_toTopOf="@id/counter"
+        app:layout_constraintHeight_percent="0.35"
+        app:gaugePointStartColor="@color/colorPrimaryDark"
+        app:gaugePointEndColor="@color/colorAccentDark"
+        app:gaugePointSize="0"
+        app:gaugeStartAngle="135"
+        app:gaugeStrokeCap="ROUND"
+        app:gaugeStrokeColor="@color/colorPrimaryBright"
+        app:gaugeStrokeWidth="10dp"
+        app:gaugeStartValue="0"
+        app:gaugeEndValue="100"
+        app:gaugeSweepAngle="270" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
